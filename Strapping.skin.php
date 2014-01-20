@@ -147,22 +147,30 @@ class StrappingTemplate extends BaseTemplate {
 ?>
 
 <?php if ( $wgGroupPermissions['*']['edit'] || $wgStrappingSkinAnonNavbar || $this->data['loggedin'] ) { ?>
-<div id="userbar" class="navbar navbar-static">
-  <div class="navbar-inner">
-    <div style="width: auto;" class="container">
-
-      <div class="pull-left">
+<nav class="navbar navbar-default" role="navigation">  
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+      <a class="navbar-brand" href="#">Blue Engineering</a>
+  </div>
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <!-- <div class="pull-left"> -->
         <?php
-          if ( $wgStrappingSkinLogoLocation == 'navbar' ) {
-            $this->renderLogo();
-          }
+          #if ( $wgStrappingSkinLogoLocation == 'navbar' ) {
+          #  $this->renderLogo();
+          #}
           # Page header & menu
           $this->renderNavigation( array( 'PAGE' ) );
 
           # This content in other languages
-          if ( $this->data['language_urls'] ) {
-            $this->renderNavigation( array( 'LANGUAGES' ) );
-          }
+          #if ( $this->data['language_urls'] ) {
+          #  $this->renderNavigation( array( 'LANGUAGES' ) );
+          #}
 
           # Edit button
           $this->renderNavigation( array( 'EDIT' ) ); 
@@ -177,9 +185,10 @@ class StrappingTemplate extends BaseTemplate {
             $this->renderNavigation( array( 'TOOLBOX' ) ); 
           }
         ?>
-      </div>
-
-      <div class="pull-right">
+    </ul> 
+        <!-- </div>
+   <ul class="nav navbar-nav navbar-right">     
+      <div class="pull-right"> -->
         <?php
           if ($wgSearchPlacement['header']) {
             $this->renderNavigation( array( 'SEARCH' ) ); 
@@ -188,40 +197,42 @@ class StrappingTemplate extends BaseTemplate {
           # Personal menu (at the right)
           $this->renderNavigation( array( 'PERSONAL' ) ); 
         ?>
-      </div>
-
-    </div>
+        <!-- </div> -->
   </div>
-</div>
+    
+</nav>
+
 <?php } ?>
 
-    <div id="mw-page-base" class="noprint"></div>
-    <div id="mw-head-base" class="noprint"></div>
+  <!-- <div id="mw-page-base" class="noprint"></div>
+  <div id="mw-head-base" class="noprint"></div> -->
 
-    <!-- Header -->
-    <div id="page-header" class="container <?php echo $this->data['loggedin'] ? 'signed-in' : 'signed-out'; ?>">
-      <section class="span12">
+  <!-- Header -->
+  <div id="page-header" class="container <?php echo $this->data['loggedin'] ? 'signed-in' : 'signed-out'; ?>">
+    <div class="row">
+  	  <div class="col-md-12">
+        <?php
+        if ( $wgStrappingSkinLogoLocation == 'bodycontent' ) {
+          $this->renderLogo();
+        } ?>
+      </div>
+    </div>   
+  	<div class="row">				
+  	  <div class="col-md-12">				 	
+  		  <ul class="nav nav-tabs nav-justified">							 
+  	      <?php
+  	      $this->renderNavigation( array( 'SIDEBAR' ) );
 
-      <?php
-      if ( $wgStrappingSkinLogoLocation == 'bodycontent' ) {
-        $this->renderLogo();
-      } ?>
+  	      if ($wgSearchPlacement['nav']) {
+  	        $this->renderNavigation( array( 'SEARCHNAV' ) );
+  	      }
 
-      <ul class="navigation nav nav-pills pull-right searchform-disabled">
-
-      <?php
-      $this->renderNavigation( array( 'SIDEBAR' ) );
-
-      if ($wgSearchPlacement['nav']) {
-        $this->renderNavigation( array( 'SEARCHNAV' ) );
-      }
-
-      ?>
-
-      </ul>
-
-    </section>
-    </div>
+  	      ?>						
+        </ul>
+  		</div>			      
+  	</div>
+  </div>
+    
 
     <?php if ($this->data['loggedin']) {
       $userStateClass = "user-loggedin";
@@ -235,8 +246,11 @@ class StrappingTemplate extends BaseTemplate {
       $userStateClass += " not-editable";
     } ?>
 
+
     <!-- content -->
-    <section id="content" class="mw-body container <?php echo $userStateClass; ?>">
+    <div id="content" class="mw-body container <?php echo $userStateClass; ?>">
+    <div class="row">  
+      <div class="col-md-12">
       <div id="top"></div>
       <div id="mw-js-message" style="display:none;"<?php $this->html( 'userlangattributes' ) ?>></div>
       <?php if ( $this->data['sitenotice'] ): ?>
@@ -281,7 +295,7 @@ class StrappingTemplate extends BaseTemplate {
           </div>
         <?php } else {
           # If there's no custom layout, then we automagically add one ?>
-          <div id="innerbodycontent" class="row nolayout"><div class="offset1 span10">
+          <div id="innerbodycontent" class="row"><div class="col-md-12">
             <h1 id="firstHeading" class="firstHeading page-header">
               <span dir="auto"><?php $this->html( 'title' ) ?></span>
             </h1>
@@ -321,7 +335,9 @@ class StrappingTemplate extends BaseTemplate {
         <!-- /debughtml -->
       </div>
       <!-- /bodyContent -->
-    </section>
+      </div>
+    </div>
+    </div>
     <!-- /content -->
 
       <!-- footer -->
@@ -412,13 +428,17 @@ class StrappingTemplate extends BaseTemplate {
         $mainPageLink = $this->data['nav_urls']['mainpage']['href'];
         $toolTip = Xml::expandAttributes( Linker::tooltipAndAccesskeyAttribs( 'p-logo' ) );
 ?>
-                  <ul class="nav logo-container" role="navigation"><li id="p-logo"><a href="<?php echo htmlspecialchars( $this->data['nav_urls']['mainpage']['href'] ) ?>" <?php echo Xml::expandAttributes( Linker::tooltipAndAccesskeyAttribs( 'p-logo' ) ) ?>><img src="<?php $this->text( 'logopath' ); ?>" alt="<?php $this->html('sitename'); ?>"></a><li></ul>
+		<div class="row">
+    	<div class="col-sm-9" ><h1><a href="<?php echo htmlspecialchars( $this->data['nav_urls']['mainpage']['href'] ) ?>">Blue Engineering</a></h1>Ingenieurinnen und Ingenieure mit sozialer und ökologischer Verantwortung</div>
+    	<div class="col-sm-3 hidden-xs"><a href="<?php echo htmlspecialchars( $this->data['nav_urls']['mainpage']['href'] ) ?>" <?php echo Xml::expandAttributes( Linker::tooltipAndAccesskeyAttribs( 'p-logo' ) ) ?>><img  class="img-responsive hidden-xs" src="<?php $this->text( 'logopath' ); ?>" alt="<?php $this->html('sitename'); ?>"></a></div>
+  	</div>
+                  
 <?php
   }
 
   /**
    * Render one or more navigations elements by name, automatically reveresed
-   * when UI is in RTL mode
+   * when UI is in RTL 
    *
    * @param $elements array
    */
@@ -447,10 +467,13 @@ class StrappingTemplate extends BaseTemplate {
           }
           $navTemp = $this->data['content_actions']['edit'];
 
-          if ($navTemp) { ?>
-            <div class="actions pull-left nav">
-                <a id="b-edit" href="<?php echo $navTemp['href']; ?>" class="btn"><i class="icon-edit"></i> <?php echo $navTemp['text']; ?></a>
-            </div>
+          if ($navTemp) { ?>            
+            <li>
+            <!--<div class="actions pull-left nav">-->
+                <a id="b-edit" href="<?php echo $navTemp['href']; ?>"><?php echo $navTemp['text']; ?></a>
+            <!--</div>-->
+            </li>
+            
           <?php } 
         break;
 
@@ -459,7 +482,6 @@ class StrappingTemplate extends BaseTemplate {
           $theMsg = 'namespaces';
           $theData = array_merge($this->data['namespace_urls'], $this->data['view_urls']);
           ?>
-          <ul class="nav" role="navigation">
             <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
               <?php
               foreach ( $theData as $link ) {
@@ -478,7 +500,7 @@ class StrappingTemplate extends BaseTemplate {
                   ?><li<?php echo $link['attributes'] ?>><a href="<?php echo htmlspecialchars( $link['href'] ) ?>" <?php echo $link['key'] ?> tabindex="-1"><?php echo htmlspecialchars( $link['text'] ) ?></a></li><?php
                 }
 
-          ?></ul></li></ul><?php
+          ?></ul></li><?php
 
         break;
 
@@ -489,7 +511,7 @@ class StrappingTemplate extends BaseTemplate {
           $theData = array_reverse($this->getToolbox());
           ?>
 
-          <ul class="nav" role="navigation">
+          <ul class="nav navbar-nav" role="navigation">
 
             <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
 
@@ -521,7 +543,7 @@ class StrappingTemplate extends BaseTemplate {
           $theData = $this->data['variant_urls'];
           ?>
           <?php if (count($theData) > 0) { ?>
-            <ul class="nav" role="navigation">
+            <ul class="nav navbar-nav" role="navigation">
               <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
                 <a data-toggle="dropdown" class="dropdown-toggle" role="button"><?php $this->msg($theMsg) ?> <b class="caret"></b></a>
                 <ul aria-labelledby="<?php echo $this->msg($theMsg); ?>" role="menu" class="dropdown-menu" <?php $this->html( 'userlangattributes' ) ?>>
@@ -540,7 +562,7 @@ class StrappingTemplate extends BaseTemplate {
           $theData = $this->data['view_urls'];
           ?>
           <?php if (count($theData) > 0) { ?>
-            <ul class="nav" role="navigation">
+            <ul class="nav navbar-nav" role="navigation">
               <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
                 <a data-toggle="dropdown" class="dropdown-toggle" role="button"><?php $this->msg($theMsg) ?> <b class="caret"></b></a>
                 <ul aria-labelledby="<?php echo $this->msg($theMsg); ?>" role="menu" class="dropdown-menu" <?php $this->html( 'userlangattributes' ) ?>>
@@ -560,7 +582,7 @@ class StrappingTemplate extends BaseTemplate {
           $theData = array_reverse($this->data['action_urls']);
           
           if (count($theData) > 0) {
-            ?><ul class="nav" role="navigation">
+            ?>
               <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
                 <a data-toggle="dropdown" class="dropdown-toggle" role="button"><?php echo $this->msg( 'actions' ); ?> <b class="caret"></b></a>
                 <ul aria-labelledby="<?php echo $this->msg($theMsg); ?>" role="menu" class="dropdown-menu" <?php $this->html( 'userlangattributes' ) ?>>
@@ -576,7 +598,7 @@ class StrappingTemplate extends BaseTemplate {
                   <?php endforeach; ?>
                 </ul>
               </li>
-            </ul><?php
+              <?php
           }
 
         break;
@@ -594,7 +616,7 @@ class StrappingTemplate extends BaseTemplate {
           }
 
           ?>
-          <ul class="nav pull-right" role="navigation">
+          <ul class="nav navbar-nav navbar-right" role="navigation">
             <li class="dropdown" id="p-notifications" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
             <?php if ( array_key_exists('notifications', $theData) ) {
               echo $this->makeListItem( 'notifications', $theData['notifications'] );
@@ -640,8 +662,8 @@ class StrappingTemplate extends BaseTemplate {
 
         case 'SEARCH':
           ?>
-            <form class="navbar-search" action="<?php $this->text( 'wgScript' ) ?>" id="searchform">
-              <input id="searchInput" class="search-query" type="search" accesskey="f" title="<?php $this->text('searchtitle'); ?>" placeholder="<?php $this->msg('search'); ?>" name="search" value="<?php echo htmlspecialchars ($this->data['search']); ?>">
+            <form class="navbar-form navbar-right" action="<?php $this->text( 'wgScript' ) ?>" id="searchform">
+              <input id="searchInput" class="search-query form-control" type="search" accesskey="f" title="<?php $this->text('searchtitle'); ?>" placeholder="<?php $this->msg('search'); ?>" name="search" value="<?php echo htmlspecialchars ($this->data['search']); ?>">
               <?php echo $this->makeSearchButton( 'fulltext', array( 'id' => 'mw-searchButton', 'class' => 'searchButton btn hidden' ) ); ?>
             </form>
 
@@ -684,7 +706,7 @@ class StrappingTemplate extends BaseTemplate {
             }
             $msgObj = wfMessage( $name );
             $name = htmlspecialchars( $msgObj->exists() ? $msgObj->text() : $name ); ?>
-          <ul class="nav" role="navigation">
+          
           <li class="dropdown" id="p-<?php echo $name; ?>" class="vectorMenu">
           <a data-toggle="dropdown" class="dropdown-toggle" role="menu"><?php echo htmlspecialchars( $name ); ?> <b class="caret"></b></a>
           <ul aria-labelledby="<?php echo htmlspecialchars( $name ); ?>" role="menu" class="dropdown-menu" <?php $this->html( 'userlangattributes' ) ?>><?php
@@ -700,8 +722,9 @@ class StrappingTemplate extends BaseTemplate {
                 <li class="<?php echo $navClasses ?>"><?php echo $this->makeLink($key, $val); ?></li><?php
             }
           }?>
-         </li>
-         </ul></ul><?php
+          </ul>
+          </li>
+         <?php
         break;
 
 
