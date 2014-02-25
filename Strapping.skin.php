@@ -222,9 +222,11 @@ class StrappingTemplate extends BaseTemplate {
   		  <ul class="nav nav-tabs nav-justified">							 
   	      <?php
   	      $this->renderNavigation( array( 'SIDEBAR' ) );
+          $this->renderNavigation( array( 'TOOLBOX' ) ); 
 
   	      if ($wgSearchPlacement['nav']) {
   	        $this->renderNavigation( array( 'SEARCHNAV' ) );
+
   	      }
 
   	      ?>						
@@ -511,7 +513,6 @@ class StrappingTemplate extends BaseTemplate {
           $theData = array_reverse($this->getToolbox());
           ?>
 
-          <ul class="nav navbar-nav" role="navigation">
 
             <li class="dropdown" id="p-<?php echo $theMsg; ?>" class="vectorMenu<?php if ( count($theData) == 0 ) echo ' emptyPortlet'; ?>">
 
@@ -532,7 +533,6 @@ class StrappingTemplate extends BaseTemplate {
 
             </li>
 
-          </ul>
           <?php
         break;
 
