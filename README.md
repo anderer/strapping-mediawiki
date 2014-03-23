@@ -1,6 +1,6 @@
 # Strapping, a friendly starter theme for MediaWiki
 
-Strapping is an elegant, responsive, and friendly starter skin for MediaWiki.
+Strpping is an elegant, responsive, and friendly starter skin for MediaWiki.
 Its purpose is to provide a good base to build upon,
 and was primarily created to provide a great default for wiki-as-a-website
 — but it works well for standard wikis too.
